@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_app/components/button.dart';
-import 'package:my_app/models/food.dart';
 import 'package:my_app/theme/colors.dart';
+import 'package:provider/provider.dart';
 
 import '../components/food_tile.dart';
+import '../models/shop.dart';
 import 'food_details_page.dart';
 
 class MenuPage extends StatefulWidget {
@@ -15,31 +16,16 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
-  //food menu
-  List foodmenu = [
-    // salmon sushi
-    Food(
-      name: "Salmon Sushi",
-      price: "21.00",
-      imagePath: "lib/images/sushi_salmon.png",
-      rating: "4.9",
-    ),
-    //tuna
-    Food(
-      name: "Tuna",
-      price: "23.00",
-      imagePath: "lib/images/tuna.png",
-      rating: "3.9",
-    ),
-  ];
-
   // navigate to food item details page
   void navigateToFoodDetials(int index) {
+    // get the shop and it's menu
+    final shop = context.read<Shop>();
+    final foodMenu = shop.foodMenu;
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => FoodDetailsPage(
-          food:foodmenu[index],
+          food: foodMenu[index],
         ),
       ),
     );
@@ -47,19 +33,29 @@ class _MenuPageState extends State<MenuPage> {
 
   @override
   Widget build(BuildContext context) {
+    // get the shop and it's menu
+    final shop = context.read<Shop>();
+    final foodMenu = shop.foodMenu;
+
     return Scaffold(
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        foregroundColor: Colors.grey[800],
         elevation: 0,
-        leading: Icon(
-          Icons.menu,
-          color: Colors.grey[900],
+        leading: Icon(Icons.menu),
+        title: Center(
+          child: const Text('Tokyo'),
         ),
-        title: Text(
-          "Tokyo",
-          style: TextStyle(color: Colors.grey[900]),
-        ),
+        actions: [
+          //  cart button
+          IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/cartpage');
+            },
+            icon: Icon(Icons.shopping_cart),
+          ),
+        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,10 +126,10 @@ class _MenuPageState extends State<MenuPage> {
           Expanded(
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: foodmenu.length,
+              itemCount: foodMenu.length,
               itemBuilder: ((context, index) => FoodTile(
-                    food: foodmenu[index],
-                    onTap: () => navigateToFoodDetials(index) ,
+                    food: foodMenu[index],
+                    onTap: () => navigateToFoodDetials(index),
                   )),
             ),
           ),
