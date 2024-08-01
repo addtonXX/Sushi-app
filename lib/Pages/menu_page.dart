@@ -45,7 +45,7 @@ class _MenuPageState extends State<MenuPage> {
         elevation: 0,
         leading: Icon(Icons.menu),
         title: Center(
-          child: const Text('Tokyo'),
+          child: Text('Tokyo'),
         ),
         actions: [
           //  cart button

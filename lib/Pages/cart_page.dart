@@ -31,7 +31,7 @@ class CartPage extends StatelessWidget {
             final String foodPrice = food.price;
 
             // return list tile
-
+            
             return ListTile(
               title: Text(foodName),
               subtitle: Text(foodPrice),
